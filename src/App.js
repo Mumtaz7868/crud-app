@@ -1,10 +1,10 @@
 import "./App.css";
-
+import DashboardLayout from "./Comopnents/layout/DashboardLayout";
 function App() {
   return (
-    <div>
-      <h1>Hello world</h1>
-    </div>
+    <>
+      <DashboardLayout />
+    </>
   );
 }
 
