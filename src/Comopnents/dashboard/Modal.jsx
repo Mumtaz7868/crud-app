@@ -1,16 +1,20 @@
 import React from "react";
 import AddProductForm from "./AddProdcuform";
 
-const Modal = ({ isOpen, setIsOpen, setData }) => {
+const Modal = ({ formData, setFormData, handleSubmit, isEdit, setIsOpen }) => {
   return (
     <>
       <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="fixed inset-0 bg-white opacity-50"></div>
+        <div
+          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 bg-black opacity-50 cursor-pointer"
+        ></div>
         <div className="bg-white p-4 z-10 rounded-md">
           <AddProductForm
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            setData={setData}
+            formData={formData}
+            setFormData={setFormData}
+            handleSubmit={handleSubmit}
+            isEdit={isEdit}
           />
         </div>
       </div>

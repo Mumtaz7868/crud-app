@@ -9,7 +9,7 @@ const DashboardLayout = () => {
       <Header />
       <SideBar />
       <div
-        className="lg:ml-64 bg-gray-800"
+        className="lg:ml-60"
         style={{
           minHeight: "calc(100vh - 30px)",
         }}

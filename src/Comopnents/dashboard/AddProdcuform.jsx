@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 
-const AddProductForm = ({ isOpen, setIsOpen, setData }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    subtitle: "",
-    image: "",
-    description: "",
-  });
+const AddProductForm = ({ formData, setFormData, handleSubmit, isEdit }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -15,16 +9,11 @@ const AddProductForm = ({ isOpen, setIsOpen, setData }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setData((prevVal) => [...prevVal, formData]);
-    console.log("Form submitted:", formData);
-    setIsOpen(false);
-  };
-
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-md shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Add Product</h2>
+      <h2 className="text-2xl font-bold mb-4">
+        {isEdit ? "Edit" : "Add"} Product
+      </h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="title" className="block text-gray-600">
@@ -35,6 +24,7 @@ const AddProductForm = ({ isOpen, setIsOpen, setData }) => {
             name="title"
             value={formData.title}
             onChange={handleChange}
+            autoComplete="true"
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
@@ -55,7 +45,7 @@ const AddProductForm = ({ isOpen, setIsOpen, setData }) => {
             Image
           </label>
           <input
-            type="file"
+            type="text"
             name="image"
             value={formData.image}
             onChange={handleChange}
