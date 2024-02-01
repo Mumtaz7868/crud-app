@@ -1,17 +1,16 @@
 import React from "react";
 import { useState } from "react";
 import Modal from "./Modal";
+import { Link } from "react-router-dom";
 
 const initialData = {
-  id: new Date().getTime(),
   title: "",
   subtitle: "",
   image: "",
   description: "",
 };
-const Dashboard = () => {
+const Dashboard = ({ data, setData }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [id, setId] = useState(null);
   const [formData, setFormData] = useState(initialData);
@@ -20,15 +19,14 @@ const Dashboard = () => {
     const remainingData = data.filter((item) => item.id !== id);
     setData(remainingData);
   };
-
   const handleEdit = (item) => {
     setIsEdit(true);
     setId(item.id);
     const editData = {
-      title: data.title,
-      subtitle: data.subtitle,
-      image: data.image,
-      description: data.description,
+      title: item.title,
+      subtitle: item.subtitle,
+      image: item.image,
+      description: item.description,
     };
     setFormData(editData);
     setIsOpen(true);
@@ -42,16 +40,17 @@ const Dashboard = () => {
         item.id === id ? { ...item, ...formData } : item
       );
       setData(updatedData);
-    } else {
+      setIsEdit(false);
       setFormData(initialData);
+    } else {
       const newObject = {
+        id: new Date().getTime(),
         ...formData,
       };
       setData((prevVal) => [...prevVal, newObject]);
     }
     setIsOpen(false);
   };
-  console.log("data", data);
 
   return (
     <div className="p-3">
@@ -77,11 +76,13 @@ const Dashboard = () => {
             key={item.id}
             className="max-w-sm w-80 rounded overflow-hidden shadow-lg"
           >
-            <img
-              className="w-full h-48 object-cover"
-              src={item.image}
-              alt="image here"
-            />
+            <Link to={`/card/${item.id}`}>
+              <img
+                className="w-full h-48 object-cover"
+                src={item.image}
+                alt="image here"
+              />
+            </Link>
             <div className="px-6 py-4">
               <div className="font-bold text-xl mb-2">{item.title}</div>
               <p className="text-gray-700 text-base">{item.subtitle}</p>

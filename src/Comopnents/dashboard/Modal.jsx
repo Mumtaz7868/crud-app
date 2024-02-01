@@ -1,5 +1,5 @@
 import React from "react";
-import AddProductForm from "./AddProdcuform";
+import AddProductForm from "./AddProdcutform";
 
 const Modal = ({ formData, setFormData, handleSubmit, isEdit, setIsOpen }) => {
   return (

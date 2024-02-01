@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 const AddProductForm = ({ formData, setFormData, handleSubmit, isEdit }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
