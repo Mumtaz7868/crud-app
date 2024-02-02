@@ -1,7 +1,9 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const CardDetailPage = ({ data }) => {
+const CardDetailPage = () => {
+  const data = useSelector((state) => state.data.data);
   const navigate = useNavigate();
   const { id } = useParams();
   const selectedItem = data.find((item) => item.id === parseInt(id));

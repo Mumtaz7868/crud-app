@@ -2,22 +2,28 @@ import React from "react";
 import { useState } from "react";
 import Modal from "./Modal";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setData, editData, deleteData } from "../../store/slices/dataSlice";
+import { closeModal, openModal } from "../../store/slices/modalSlice";
 const initialData = {
   title: "",
   subtitle: "",
   image: "",
   description: "",
 };
-const Dashboard = ({ data, setData }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Dashboard = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [id, setId] = useState(null);
   const [formData, setFormData] = useState(initialData);
 
+  const dispatch = useDispatch();
+
+  const usersData = useSelector((state) => state.data.data);
+  const open = useSelector((state) => state.modal.modal);
+
   const handleDelete = (id) => {
-    const remainingData = data.filter((item) => item.id !== id);
-    setData(remainingData);
+    const remainingData = usersData.filter((item) => item.id !== id);
+    dispatch(deleteData(remainingData));
   };
   const handleEdit = (item) => {
     setIsEdit(true);
@@ -29,17 +35,17 @@ const Dashboard = ({ data, setData }) => {
       description: item.description,
     };
     setFormData(editData);
-    setIsOpen(true);
+    dispatch(openModal(true));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (isEdit) {
-      const updatedData = data.map((item) =>
+      const updatedData = usersData.map((item) =>
         item.id === id ? { ...item, ...formData } : item
       );
-      setData(updatedData);
+      dispatch(editData(updatedData));
       setIsEdit(false);
       setFormData(initialData);
     } else {
@@ -47,22 +53,21 @@ const Dashboard = ({ data, setData }) => {
         id: new Date().getTime(),
         ...formData,
       };
-      setData((prevVal) => [...prevVal, newObject]);
+      dispatch(setData([...usersData, newObject]));
     }
-    setIsOpen(false);
+    dispatch(closeModal(false));
   };
 
   return (
     <div className="p-3">
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => dispatch(openModal(true))}
         className="text-black text-2xl p-2 rounded-md float-right bg-yellow-400 hover:bg-yellow-500 font-bold"
       >
         Add Product
       </button>
-      {isOpen && (
+      {open && (
         <Modal
-          setIsOpen={setIsOpen}
           setFormData={setFormData}
           formData={formData}
           handleSubmit={handleSubmit}
@@ -71,7 +76,7 @@ const Dashboard = ({ data, setData }) => {
       )}
 
       <div className="flex gap-4 flex-wrap mt-16 mx-5">
-        {data.map((item) => (
+        {usersData.map((item) => (
           <div
             key={item.id}
             className="max-w-sm w-80 rounded overflow-hidden shadow-lg"
