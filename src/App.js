@@ -3,7 +3,7 @@ import "./App.css";
 import DashboardLayout from "./Comopnents/layout/DashboardLayout";
 import Dashboard from "./Comopnents/dashboard/Dashboard";
 import CardDetailPage from "./Comopnents/dashboard/CardDetailPage";
-import { useState } from "react";
+import Home from "./Comopnents/sidebarPages/Home";
 
 function App() {
   return (
@@ -13,6 +13,7 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route exact path="/" element={<Dashboard />} />
             <Route path="/card/:id" element={<CardDetailPage />} />
+            <Route path="/home" element={<Home />} />
           </Route>
         </Routes>
       </BrowserRouter>

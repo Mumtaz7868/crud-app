@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   faHouse,
   faUser,
@@ -13,10 +13,13 @@ const SideBar = () => {
       <img className="rounded-lg h-10 mr-1" src={logo} alt="Logo here" />
 
       <ul className="mt-8">
-        <div className="flex items-center m-2">
+        <Link
+          to="/home"
+          className="flex items-center m-2 border border-red-950"
+        >
           <FontAwesomeIcon size="1x" icon={faHouse} />
           <li className="ml-4">Home</li>
-        </div>
+        </Link>
         <div className="flex items-center m-2">
           <FontAwesomeIcon size="1x" icon={faUser} />
           <li className="ml-4">About</li>

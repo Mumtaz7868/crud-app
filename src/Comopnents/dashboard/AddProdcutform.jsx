@@ -1,10 +1,13 @@
-const AddProductForm = ({ formData, setFormData, handleSubmit, isEdit }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { setFormData } from "../../store/slices/formSlice";
+const AddProductForm = ({ handleSubmit, isEdit }) => {
+  const dispatch = useDispatch();
+  const getUserData = useSelector((state) => state.formData.formData);
+  console.log(getUserData, "getUserData");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    dispatch(setFormData({ ...getUserData, [name]: value }));
   };
 
   return (
@@ -20,7 +23,7 @@ const AddProductForm = ({ formData, setFormData, handleSubmit, isEdit }) => {
           <input
             type="text"
             name="title"
-            value={formData.title}
+            value={getUserData.title}
             onChange={handleChange}
             autoComplete="true"
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
@@ -33,7 +36,7 @@ const AddProductForm = ({ formData, setFormData, handleSubmit, isEdit }) => {
           <input
             type="tel"
             name="subtitle"
-            value={formData.subtitle}
+            value={getUserData.subtitle}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
           />
@@ -45,7 +48,7 @@ const AddProductForm = ({ formData, setFormData, handleSubmit, isEdit }) => {
           <input
             type="text"
             name="image"
-            value={formData.image}
+            value={getUserData.image}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
           />
@@ -57,7 +60,7 @@ const AddProductForm = ({ formData, setFormData, handleSubmit, isEdit }) => {
           <textarea
             type="text"
             name="description"
-            value={formData.description}
+            value={getUserData.description}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
           />

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setData, editData, deleteData } from "../../store/slices/dataSlice";
 import { closeModal, openModal } from "../../store/slices/modalSlice";
+import { setFormData } from "../../store/slices/formSlice";
 const initialData = {
   title: "",
   subtitle: "",
@@ -14,12 +15,14 @@ const initialData = {
 const Dashboard = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [id, setId] = useState(null);
-  const [formData, setFormData] = useState(initialData);
 
   const dispatch = useDispatch();
 
   const usersData = useSelector((state) => state.data.data);
   const open = useSelector((state) => state.modal.modal);
+  const getFormData = useSelector((state) => state.formData.formData);
+
+  console.log(getFormData, "getFormData");
 
   const handleDelete = (id) => {
     const remainingData = usersData.filter((item) => item.id !== id);
@@ -34,8 +37,8 @@ const Dashboard = () => {
       image: item.image,
       description: item.description,
     };
-    setFormData(editData);
-    dispatch(openModal(true));
+    dispatch(setFormData(editData));
+    dispatch(openModal());
   };
 
   const handleSubmit = (e) => {
@@ -43,37 +46,30 @@ const Dashboard = () => {
 
     if (isEdit) {
       const updatedData = usersData.map((item) =>
-        item.id === id ? { ...item, ...formData } : item
+        item.id === id ? { ...item, ...getFormData } : item
       );
       dispatch(editData(updatedData));
       setIsEdit(false);
-      setFormData(initialData);
+      dispatch(setFormData(initialData));
     } else {
       const newObject = {
         id: new Date().getTime(),
-        ...formData,
+        ...getFormData,
       };
       dispatch(setData([...usersData, newObject]));
     }
-    dispatch(closeModal(false));
+    dispatch(closeModal());
   };
 
   return (
     <div className="p-3">
       <button
-        onClick={() => dispatch(openModal(true))}
+        onClick={() => dispatch(openModal())}
         className="text-black text-2xl p-2 rounded-md float-right bg-yellow-400 hover:bg-yellow-500 font-bold"
       >
         Add Product
       </button>
-      {open && (
-        <Modal
-          setFormData={setFormData}
-          formData={formData}
-          handleSubmit={handleSubmit}
-          isEdit={isEdit}
-        />
-      )}
+      {open && <Modal handleSubmit={handleSubmit} isEdit={isEdit} />}
 
       <div className="flex gap-4 flex-wrap mt-16 mx-5">
         {usersData.map((item) => (
