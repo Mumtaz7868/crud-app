@@ -15,19 +15,19 @@ const SideBar = () => {
       <ul className="mt-8">
         <Link
           to="/home"
-          className="flex items-center m-2 border border-red-950"
+          className="flex items-center m-2 hover:bg-gray-900 rounded-md p-2"
         >
           <FontAwesomeIcon size="1x" icon={faHouse} />
           <li className="ml-4">Home</li>
         </Link>
-        <div className="flex items-center m-2">
+        <Link className="flex items-center m-2 hover:bg-gray-900 rounded-md p-2">
           <FontAwesomeIcon size="1x" icon={faUser} />
           <li className="ml-4">About</li>
-        </div>
-        <div className="flex items-center m-2">
+        </Link>
+        <Link className="flex items-center m-2 hover:bg-gray-900 rounded-md p-2 ">
           <FontAwesomeIcon size="1x" icon={faAddressBook} />
           <li className="ml-4">Contact</li>
-        </div>
+        </Link>
       </ul>
     </div>
   );

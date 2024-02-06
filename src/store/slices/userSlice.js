@@ -5,20 +5,21 @@ import {
 } from "@reduxjs/toolkit";
 
 export const fetchData = createAsyncThunk("fetch", async () => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const res1 = await response.json();
-  console.log(res1);
-  return res1;
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const res = await response.json();
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
 });
-export const addData = createAsyncThunk("create", async () => {
+
+export const addData = createAsyncThunk("create", async (addObj) => {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
       method: "POST",
-      body: JSON.stringify({
-        title: "foo",
-        body: "bar",
-        userId: 1,
-      }),
+      body: JSON.stringify(addObj),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -26,8 +27,43 @@ export const addData = createAsyncThunk("create", async () => {
 
     const res = await response.json();
     console.log(res, "resAdd");
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+});
+export const updateData = createAsyncThunk("edit", async (updatedObj) => {
+  console.log(updatedObj, "updatedObj");
+  try {
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/posts/1",
+      {
+        method: "PUT",
+        body: JSON.stringify(updatedObj),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    );
 
-    return res; // Return the result to be handled in fulfilled case
+    const res = await response.json();
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+});
+export const deleteData = createAsyncThunk("delete", async () => {
+  try {
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/posts/1",
+      {
+        method: "DELETE",
+      }
+    );
+
+    const res = await response.json();
+    console.log(res)
+    return res;
   } catch (error) {
     console.error(error);
   }
@@ -36,17 +72,14 @@ export const addData = createAsyncThunk("create", async () => {
 const initialState = {
   loading: false,
   user: [],
-  addedData: [],
+  createData: null,
+  editData: null,
   error: null,
 };
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    getAllData: (state, action) => {
-      state.user = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchData.pending, (state) => {
@@ -64,9 +97,29 @@ const userSlice = createSlice({
       })
       .addCase(addData.fulfilled, (state, action) => {
         state.loading = false;
-        state.addedData = action.payload;
+        state.createData = action.payload;
       })
       .addCase(addData.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(updateData.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.editData = action.payload;
+      })
+      .addCase(updateData.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(deleteData.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.editData = action.payload;
+      })
+      .addCase(deleteData.rejected, (state, action) => {
         state.error = action.error.message;
       });
   },
